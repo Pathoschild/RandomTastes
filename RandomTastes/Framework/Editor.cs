@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using StardewModdingAPI;
 
 namespace RandomTastes.Framework
@@ -29,7 +30,7 @@ namespace RandomTastes.Framework
         {
             if (!Context.IsWorldReady) return; // If we aren't in-game, don't edit anything.
 
-            ModData modData = Helper.ReadJsonFile<ModData>("saves.json") ?? new ModData(); // Load save file, or create new one.
+            ModData modData = Helper.Data.ReadJsonFile<ModData>("saves.json") ?? new ModData(); // Load save file, or create new one.
             ModDataSave dataSave = Array.Find<ModDataSave>(modData.saves, x => x.saveName == Constants.SaveFolderName); // Load data for specific save.
 
             bool elemNotFound = false;
@@ -44,73 +45,76 @@ namespace RandomTastes.Framework
 
             if (!dataSave.enabled) return; // If RandomTastes isn't enabled for this save.
 
-            asset
-                .AsDictionary<string, string>()
-                .Set((id, data) =>
+            var data = asset.AsDictionary<string, string>().Data;
+            foreach (var pair in data.ToArray())
+            {
+                string key = pair.Key;
+                string value = pair.Value;
+
+                if (key.StartsWith("Universal_"))
+                    continue; // leave universal tastes alone
+
+                ModDataEntry entry = Array.Find(dataSave.entries, x => x.id == key); // find entry
+
+                bool entryNotFound = false;
+
+                if (entry == null) // If the entry was not found
                 {
-                    if (id.StartsWith("Universal_")) return data; // leave universal tastes alone
+                    // generate new entry
+                    entry = GenerateTastes(key);
+                    entryNotFound = true;
+                }
 
-                    ModDataEntry entry = Array.Find<ModDataEntry>(dataSave.entries, x => x.id == id); // find entry
+                string[] fields = value.Split('/');
 
-                    bool entryNotFound = false;
+                for (int i = 0; i < 5; i++)
+                {
+                    List<int> selected = new List<int>();
+                    int fieldIndex = 1;
 
-                    if (entry == null) // If the entry was not found
+                    switch (i)
                     {
-                        // generate new entry
-                        entry = GenerateTastes(id);
-                        entryNotFound = true;
+                        case 0:
+                            selected = new List<int>(entry.love);
+                            fieldIndex = 1;
+                            break;
+                        case 1:
+                            selected = new List<int>(entry.like);
+                            fieldIndex = 3;
+                            break;
+                        case 2:
+                            selected = new List<int>(entry.neutral);
+                            fieldIndex = 9;
+                            break;
+                        case 3:
+                            selected = new List<int>(entry.dislike);
+                            fieldIndex = 5;
+                            break;
+                        case 4:
+                            selected = new List<int>(entry.hate);
+                            fieldIndex = 7;
+                            break;
+                        default:
+                            this.Monitor.Log($"Uhh... This doesn't seem right... ({i})", LogLevel.Error);
+                            break;
                     }
 
-                    string[] fields = data.Split('/');
+                    this.Monitor.Log($"{i} : {string.Join(" ", selected)}", LogLevel.Trace);
 
-                    for (int i = 0; i < 5; i++)
-                    {
-                        List<int> selected = new List<int>();
-                        int fieldIndex = 1;
+                    fields[fieldIndex] = string.Join(" ", selected);
+                }
 
-                        switch (i)
-                        {
-                            case 0:
-                                selected = new List<int>(entry.love);
-                                fieldIndex = 1;
-                                break;
-                            case 1:
-                                selected = new List<int>(entry.like);
-                                fieldIndex = 3;
-                                break;
-                            case 2:
-                                selected = new List<int>(entry.neutral);
-                                fieldIndex = 9;
-                                break;
-                            case 3:
-                                selected = new List<int>(entry.dislike);
-                                fieldIndex = 5;
-                                break;
-                            case 4:
-                                selected = new List<int>(entry.hate);
-                                fieldIndex = 7;
-                                break;
-                            default:
-                                this.Monitor.Log($"Uhh... This doesn't seem right... ({i})", LogLevel.Error);
-                                break;
-                        }
+                if (entryNotFound) // If the entry was not found
+                {
+                    // add entry to savefile
+                    List<ModDataEntry> entryList = new List<ModDataEntry>(dataSave.entries);
+                    entryList.Add(entry);
+                    dataSave.entries = entryList.ToArray();
+                    shouldUpdate = true;
+                }
 
-                        this.Monitor.Log($"{i} : {string.Join(" ", selected)}", LogLevel.Trace);
-
-                        fields[fieldIndex] = string.Join(" ", selected);
-                    }
-
-                    if (entryNotFound) // If the entry was not found
-                    {
-                        // add entry to savefile
-                        List<ModDataEntry> entryList = new List<ModDataEntry>(dataSave.entries);
-                        entryList.Add(entry);
-                        dataSave.entries = entryList.ToArray();
-                        shouldUpdate = true;
-                    }
-
-                    return string.Join("/", fields);
-                });
+                data[key] = string.Join("/", fields);
+            }
 
             if (elemNotFound) // If the savefile element was not found
             {
@@ -124,7 +128,7 @@ namespace RandomTastes.Framework
 
             if (shouldUpdate)
             {
-                this.Helper.WriteJsonFile("saves.json", modData); // Update mod data file
+                this.Helper.Data.WriteJsonFile("saves.json", modData); // Update mod data file
             }
         }
 

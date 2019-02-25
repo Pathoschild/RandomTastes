@@ -1,10 +1,10 @@
 ﻿{
-  "Name": "RandomTastes",
+  "Name": "Random Tastes",
   "Author": "skiilaa",
   "Version": "1.0.0",
-  "Description": "Randomize gift tastes for each savefile.",
+  "Description": "Randomize gift tastes for each save file.",
   "UniqueID": "skiilaa.RandomTastes",
   "EntryDll": "RandomTastes.dll",
-  "MinimumApiVersion": "2.0",
+  "MinimumApiVersion": "2.10.2",
   "UpdateKeys": [ "Nexus:2285", "GitHub:moriczgergo/RandomTastes" ]
 }
