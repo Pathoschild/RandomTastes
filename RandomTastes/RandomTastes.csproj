@@ -43,6 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\Editor.cs" />
+    <Compile Include="Framework\ModData.cs" />
+    <Compile Include="Framework\ModDataEntry.cs" />
+    <Compile Include="Framework\ModDataSave.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
