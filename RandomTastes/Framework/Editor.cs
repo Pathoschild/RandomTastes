@@ -99,7 +99,7 @@ namespace RandomTastes.Framework
                             break;
                     }
 
-                    this.Monitor.Log($"{i} : {string.Join(" ", selected)}", LogLevel.Trace);
+                    this.Monitor.VerboseLog($"{i} : {string.Join(" ", selected)}");
 
                     fields[fieldIndex] = string.Join(" ", selected);
                 }
@@ -166,7 +166,7 @@ namespace RandomTastes.Framework
                         else if (i == 3) dislike.Add(selectedGift);
                         else if (i == 4) hate.Add(selectedGift);
 
-                        if (this.Monitor != null) Monitor.Log($"{id}-{i}-{x}: {selectedGift}", LogLevel.Trace);
+                        this.Monitor?.VerboseLog($"{id}-{i}-{x}: {selectedGift}");
                     }
                 }
             }
