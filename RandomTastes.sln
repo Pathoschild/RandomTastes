@@ -1,20 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2015
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomTastes", "RandomTastes\RandomTastes.csproj", "{A449E4AB-4CAB-4D8C-A2A2-88E635C6EB63}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{EEA683D2-33D6-4866-BB3B-98696CE4F55C}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RandomTastes", "RandomTastes\RandomTastes.csproj", "{15326D90-BC7C-4884-B70F-324DA919D89F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A449E4AB-4CAB-4D8C-A2A2-88E635C6EB63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A449E4AB-4CAB-4D8C-A2A2-88E635C6EB63}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A449E4AB-4CAB-4D8C-A2A2-88E635C6EB63}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A449E4AB-4CAB-4D8C-A2A2-88E635C6EB63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15326D90-BC7C-4884-B70F-324DA919D89F}.Debug|x86.ActiveCfg = Debug|x86
+		{15326D90-BC7C-4884-B70F-324DA919D89F}.Debug|x86.Build.0 = Debug|x86
+		{15326D90-BC7C-4884-B70F-324DA919D89F}.Release|x86.ActiveCfg = Release|x86
+		{15326D90-BC7C-4884-B70F-324DA919D89F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
